@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Goal Is Clear</title>
+
+  <style>
+    :root {
+      --bg: #fbfbfd;
+      --panel: #ffffff;
+      --text: #0b1220;
+      --muted: #526070;
+      --muted2: #6b7788;
+
+      --blue: #2d6cdf;
+      --blue2: #1f56c2;
+
+      --line: rgba(15, 23, 42, 0.10);
+      --shadowSoft: 0 16px 44px rgba(15, 23, 42, 0.10);
+      --shadowTiny: 0 10px 26px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    body:before {
+      content: "";
+      position: fixed;
+      inset: -220px;
+      pointer-events: none;
+      z-index: -2;
+      background:
+        radial-gradient(900px 560px at 14% 8%, rgba(45, 108, 223, 0.10), transparent 62%),
+        radial-gradient(900px 560px at 86% 0%, rgba(45, 108, 223, 0.06), transparent 62%),
+        radial-gradient(820px 520px at 78% 78%, rgba(15, 23, 42, 0.05), transparent 62%);
+    }
+
+    body:after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.045;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      background-size: 240px 240px;
+      mix-blend-mode: multiply;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(251, 251, 253, 0.86);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 14px;
+    }
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .navLinks {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .navLinks a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    .navLinks a:hover {
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.04);
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, var(--blue), var(--blue2));
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 0 16px 34px rgba(45, 108, 223, 0.22);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      border: 0;
+      white-space: nowrap;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(45, 108, 223, 0.24);
+      filter: saturate(1.05);
+    }
+
+    /* Second primary (equal prominence, slightly different tone) */
+    .button.alt {
+      background: linear-gradient(180deg, #285fca, #1b4aa7);
+      box-shadow: 0 16px 34px rgba(27, 74, 167, 0.22);
+    }
+    .button.alt:hover {
+      box-shadow: 0 22px 50px rgba(27, 74, 167, 0.24);
+    }
+
+    /* HERO */
+    .heroWrap { padding: 56px 0 22px 0; }
+
+    .heroPanel {
+      border-radius: 28px;
+      padding: 34px 28px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      box-shadow: 0 18px 52px rgba(15, 23, 42, 0.10);
+      backdrop-filter: blur(10px);
+    }
+
+    .heroGrid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 44px;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 52px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin: 0 0 14px 0;
+    }
+
+    .subhead {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 62ch;
+    }
+
+    .ctaRow {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .micro {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.55;
+    }
+
+    .trustChips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .heroMedia {
+      position: relative;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(15, 23, 42, 0.09);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: var(--shadowSoft);
+      overflow: hidden;
+    }
+
+    .heroMedia img {
+      width: 100%;
+      height: 360px;
+      display: block;
+      border-radius: calc(var(--radius) - 6px);
+      object-fit: cover;
+      object-position: 70% 25%;
+      background: #e9eef7;
+    }
+
+    .imageBadge {
+      position: absolute;
+      left: 22px;
+      bottom: 22px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.90);
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    /* Sections */
+    .section { padding: 56px 0; }
+
+    .bandSoft {
+      background: linear-gradient(180deg, rgba(45, 108, 223, 0.06), rgba(251, 251, 253, 0));
+      border-top: 1px solid rgba(45, 108, 223, 0.10);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 30px;
+      letter-spacing: -0.02em;
+      margin: 0 0 10px 0;
+    }
+
+    .lead {
+      text-align: center;
+      color: var(--muted);
+      max-width: 76ch;
+      margin: 0 auto 18px auto;
+      line-height: 1.7;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(45, 108, 223, 0.0), rgba(45, 108, 223, 0.45), rgba(45, 108, 223, 0.0));
+    }
+
+    .card strong { display: block; margin-bottom: 8px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .card p + p { margin-top: 10px; }
+
+    /* Continue CTA blocks */
+    .continue {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .continueBar {
+      width: min(920px, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .continueText {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.4;
+      font-size: 14px;
+    }
+
+    .continueText strong {
+      display: block;
+      color: var(--text);
+      font-weight: 850;
+      margin-bottom: 2px;
+    }
+
+    .continueBtns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .sectionDivider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.10), transparent);
+      margin: 0 auto;
+      max-width: 1100px;
+      opacity: 0.65;
+    }
+
+    /* Skin concerns */
+    .concerns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .pill {
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 650;
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.92);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+
+    .pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+      border-color: rgba(45, 108, 223, 0.22);
+    }
+
+    /* Timeline */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .tCard {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tCard:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(45, 108, 223, 0.0), rgba(45, 108, 223, 0.40), rgba(45, 108, 223, 0.0));
+    }
+
+    .tTop {
+      font-weight: 850;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 10px;
+    }
+
+    .tMain {
+      font-weight: 850;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .tSub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    /* Trust split */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    /* FAQ (moved lower) */
+    .faqBar {
+      margin-top: 18px;
+      border-radius: 22px;
+      padding: 18px 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .faqTitle {
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .faqHint {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 4px 0 0 0;
+      line-height: 1.5;
+    }
+
+    .faqColumns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 14px;
+      margin-top: 10px;
+      align-items: start;
+    }
+
+    .faqCol {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    details.faq {
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 14px;
+      padding: 12px 12px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+      align-self: stretch;
+    }
+
+    details.faq summary {
+      cursor: pointer;
+      list-style: none;
+      line-height: 1.35;
+      font-weight: 650;
+      font-size: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    details.faq summary::-webkit-details-marker { display: none; }
+
+    details.faq summary:after {
+      content: "+";
+      font-size: 16px;
+      color: var(--muted2);
+      transform: translateY(-1px);
+      transition: transform .15s ease;
+      flex: 0 0 auto;
+    }
+
+    details.faq[open] summary:after { content: "–"; }
+
+    details.faq p {
+      margin: 10px 0 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 36px 0 48px 0;
+      border-top: 1px solid rgba(15, 23, 42, 0.06);
+      background: rgba(255, 255, 255, 0.66);
+      backdrop-filter: blur(10px);
+    }
+
+    .footerGrid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .footerSmall {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .footerLinks {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 12px;
+      justify-content: flex-end;
+      align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+
+    .footerLinks a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .footerLinks a:hover {
+      background: rgba(15, 23, 42, 0.04);
+      color: var(--text);
+    }
+
+    /* Mobile sticky CTA bar */
+    .stickyCta{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 10px 12px;
+      background: rgba(251,251,253,0.92);
+      border-top: 1px solid rgba(15,23,42,0.08);
+      backdrop-filter: blur(12px);
+      display: none;
+      gap: 10px;
+      justify-content: center;
+      transform: translateY(110%);
+      transition: transform .18s ease;
+      z-index: 60;
+    }
+    .stickyCta a{ flex: 1 1 0; max-width: 520px; }
+    .stickyCta.show{ transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .heroGrid { grid-template-columns: 1fr; }
+      h1 { font-size: 44px; }
+      .grid3 { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .split { grid-template-columns: 1fr; }
+      .footerGrid { grid-template-columns: 1fr; }
+      .footerLinks { justify-content: flex-start; }
+      .heroPanel { padding: 28px 18px; }
+      .faqColumns { grid-template-columns: 1fr; }
+      .continueBar { flex-direction: column; align-items: flex-start; }
+      .continueBtns { width: 100%; justify-content: flex-start; }
+      .heroMedia img { height: 320px; object-position: 72% 20%; }
+      .stickyCta{ display: flex; }
+      body{ padding-bottom: 76px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="logo">TheGoalIsClear</div>
+      <div class="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#concerns">Skin concerns</a>
+        <a href="#trust">Medical info</a>
+        <a href="#faq">FAQs</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="heroWrap">
+    <div class="container">
+      <div class="heroPanel">
+        <div class="heroGrid">
+          <div>
+            <h1>Clearer skin, without the guesswork.</h1>
+            <p class="subhead">
+              Personalized acne and redness treatment reviewed by licensed providers.
+              Start in minutes by choosing your path.
+            </p>
+
+            <div class="ctaRow">
+              <a class="button" href="bruhrx.html">Start BruhRX</a>
+              <a class="button alt" href="gurlrx.html">Start GurlRX</a>
+            </div>
+
+            <div class="trustChips">
+              <span class="chip">3–5 min online visit</span>
+              <span class="chip">Private + secure</span>
+              <span class="chip">Licensed providers</span>
+            </div>
+
+            <div class="micro">
+              Calm experience—backed by licensed medical review. Not for emergencies. If you have a medical emergency, call 911.
+            </div>
+          </div>
+
+          <div class="heroMedia">
+            <img src="hero.jpg" alt="Teen using phone in natural light" />
+            <div class="imageBadge">Provider-reviewed care</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bandSoft" id="how">
+    <div class="container">
+      <h2>Simple. Private. Medically guided.</h2>
+      <p class="lead">No long appointments. No guessing. Just a clear path from “what is happening?” to “here’s the plan.”</p>
+
+      <div class="grid3">
+        <div class="card">
+          <strong>Tell us about your skin</strong>
+          <p>Answer a few quick questions and upload photos.</p>
+          <p>Patients verify identity and provide consent to telemedicine services before provider review.</p>
+        </div>
+
+        <div class="card">
+          <strong>A licensed provider reviews your case</strong>
+          <p>Independent U.S.-licensed providers review your information and recommend appropriate care.</p>
+          <p>If medication is appropriate, it is prescribed at the provider’s discretion.</p>
+        </div>
+
+        <div class="card">
+          <strong>Treatment plan + follow-up</strong>
+          <p>Get clear next steps and a routine you can actually stick with.</p>
+          <p>Patients can contact their provider through secure messaging, phone, or video for follow-up.</p>
+        </div>
+      </div>
+
+      <div class="continue">
+        <div class="continueBar">
+          <p class="continueText"><strong>Ready to stop guessing?</strong>Start your visit—takes about 3–5 minutes.</p>
+          <div class="continueBtns">
+            <a class="button" href="bruhrx.html">Continue to BruhRX</a>
+            <a class="button alt" href="gurlrx.html">Continue to GurlRX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sectionDivider"></div>
+
+  <section class="section" id="concerns">
+    <div class="container">
+      <h2>Skin concerns we help improve</h2>
+      <p class="lead">We stay focused on acne + redness—so you’re not buying a cabinet full of random products.</p>
+
+      <div class="concerns">
+        <div class="pill">Breakouts</div>
+        <div class="pill">Persistent redness</div>
+        <div class="pill">Clogged pores</div>
+        <div class="pill">Oily or irritated skin</div>
+        <div class="pill">Acne scars</div>
+      </div>
+
+      <div class="micro" style="text-align:center;margin-top:12px;">
+        Focused care. Clear expectations. No unnecessary products.
+      </div>
+
+      <div class="continue">
+        <div class="continueBar">
+          <p class="continueText"><strong>Let’s build your plan.</strong>Tell us what you’re dealing with—your provider will take it from there.</p>
+          <div class="continueBtns">
+            <a class="button" href="bruhrx.html">Continue to BruhRX</a>
+            <a class="button alt" href="gurlrx.html">Continue to GurlRX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sectionDivider"></div>
+
+  <section class="section bandSoft">
+    <div class="container">
+      <h2>What improvement can look like</h2>
+      <p class="lead">Everyone’s skin is different—your provider builds a plan based on your photos, history, and goals.</p>
+
+      <div class="timeline">
+        <div class="tCard">
+          <div class="tTop">Week 1–2</div>
+          <div class="tMain">Less inflammation + calmer skin</div>
+          <p class="tSub">You’ll learn what may be triggering breakouts and what to stop using.</p>
+        </div>
+        <div class="tCard">
+          <div class="tTop">Week 3–6</div>
+          <div class="tMain">Fewer breakouts + less redness</div>
+          <p class="tSub">Your routine gets simpler, more consistent, and easier to follow.</p>
+        </div>
+        <div class="tCard">
+          <div class="tTop">Week 6+</div>
+          <div class="tMain">Clearer skin + fewer flare-ups</div>
+          <p class="tSub">Plans are adjusted as your skin changes—no guessing.</p>
+        </div>
+      </div>
+
+      <div class="micro" style="text-align:center;margin-top:12px;">
+        Results vary. Not all patients will experience the same outcomes.
+      </div>
+
+      <div class="continue">
+        <div class="continueBar">
+          <p class="continueText"><strong>Want a calmer routine?</strong>Start your visit and get a plan that makes sense for your skin.</p>
+          <div class="continueBtns">
+            <a class="button" href="bruhrx.html">Start BruhRX</a>
+            <a class="button alt" href="gurlrx.html">Start GurlRX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sectionDivider"></div>
+
+  <section class="section" id="trust">
+    <div class="container">
+      <h2>Medical care you can trust</h2>
+      <p class="lead">Clear disclosures, licensed provider review, and straightforward expectations—without the “clinic brochure” vibe.</p>
+
+      <div class="split">
+        <div class="card">
+          <strong>Medical oversight + consent</strong>
+          <p>
+            Independent U.S.-licensed providers review visits and are licensed in the state where the patient is located.
+            Patients provide consent to telemedicine services before consultation begins.
+          </p>
+          <p>
+            Patients under 18 may participate with parent or guardian consent (requirements vary by state).
+          </p>
+          <p>
+            Prescriptions, when appropriate, are issued at the provider’s discretion and fulfilled by a licensed pharmacy.
+          </p>
+        </div>
+
+        <div class="card">
+          <strong>Privacy + follow-up access</strong>
+          <p>
+            We use a secure, HIPAA-compliant platform to protect personal health information.
+            Access to records is limited to authorized users.
+          </p>
+          <p>
+            Patients can contact their provider through secure messaging, phone, or video for questions or follow-up.
+          </p>
+
+          <div class="ctaRow" style="margin-top:14px;">
+            <a class="button" href="bruhrx.html">Continue to BruhRX</a>
+            <a class="button alt" href="gurlrx.html">Continue to GurlRX</a>
+          </div>
+
+          <div class="micro">Not for emergencies. If you have a medical emergency, call 911.</div>
+        </div>
+      </div>
+
+      <div class="micro" style="text-align:center;margin-top:14px;">
+        Telemedicine services are provided in accordance with applicable state laws and regulations.
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ MOVED HERE (below trust) -->
+  <section class="section bandSoft" id="faq">
+    <div class="container">
+      <h2>FAQs</h2>
+      <p class="lead">Short answers. No fluff.</p>
+
+      <div class="faqBar">
+        <div>
+          <p class="faqTitle">Quick answers (so you can stop guessing)</p>
+          <p class="faqHint">Tap a question for the short version.</p>
+        </div>
+
+        <div class="faqColumns">
+          <div class="faqCol">
+            <details class="faq">
+              <summary>How does the online visit work?</summary>
+              <p>You’ll answer a few questions and upload photos. A licensed provider reviews your info and responds with a plan—no waiting room.</p>
+            </details>
+
+            <details class="faq">
+              <summary>Is this just over-the-counter products?</summary>
+              <p>No. Your provider can recommend a routine and, when appropriate, prescribe treatment tailored to your skin.</p>
+            </details>
+
+            <details class="faq">
+              <summary>Where do you operate?</summary>
+              <p>We coordinate care across all 50 U.S. states, Washington D.C., and Guam—through providers licensed where you are.</p>
+            </details>
+          </div>
+
+          <div class="faqCol">
+            <details class="faq">
+              <summary>How long does it take?</summary>
+              <p>Most people finish the intake in about 3–5 minutes. Provider review timing can vary by state and volume.</p>
+            </details>
+
+            <details class="faq">
+              <summary>Do I need parent/guardian consent?</summary>
+              <p>Patients under 18 may participate with parent or guardian consent. Exact requirements can vary by state.</p>
+            </details>
+
+            <details class="faq">
+              <summary>Can I contact my provider?</summary>
+              <p>Yes. Patients can contact their provider through secure messaging, phone, or video for questions or follow-up.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="continue">
+        <div class="continueBar">
+          <p class="continueText"><strong>Ready to begin?</strong>Choose your path and start your online visit.</p>
+          <div class="continueBtns">
+            <a class="button" href="bruhrx.html">Start BruhRX</a>
+            <a class="button alt" href="gurlrx.html">Start GurlRX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <div class="footerGrid">
+        <div class="footerSmall">
+          <strong>BNG Health Services</strong><br />
+          PO Box 503, Sandpoint, ID 83864<br />
+          <a href="mailto:matt@bngrx.com" style="color:inherit;">matt@bngrx.com</a>
+          <div style="margin-top:10px; color:var(--muted2);">
+            Cash-pay • No controlled substances
+          </div>
+        </div>
+
+        <div class="footerLinks">
+          <!-- Point these to your real policy pages OR anchor sections if you create them -->
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="medical.html">Medical Information</a>
+          <a href="#faq">FAQs</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile sticky CTA (shows after a little scroll) -->
+  <div class="stickyCta" id="stickyCta" aria-label="Quick start">
+    <a class="button" href="bruhrx.html">Start BruhRX</a>
+    <a class="button alt" href="gurlrx.html">Start GurlRX</a>
+  </div>
+
+  <script>
+    (function(){
+      const el = document.getElementById('stickyCta');
+      if(!el) return;
+      const showAt = 220; // px scrolled before showing
+      const onScroll = () => el.classList.toggle('show', window.scrollY > showAt);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+
+</body>
+</html>
